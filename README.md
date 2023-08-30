@@ -1,0 +1,1 @@
+# copilot-cli-cockpit-ext
