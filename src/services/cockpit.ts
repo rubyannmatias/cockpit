@@ -13,7 +13,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { OpenAI } from 'openai';
 import { OpenAIModels, openAIChatCompletionCreateDefaults } from './constants';
-import { getUserInfo, getPlatformInfo, getDirectoryList } from '../utils/envUtil';
+import { getUserInfo, getPlatformInfo, getDirectoryList } from '../utils/envUtils';
 
 require('dotenv').config({ path: path.resolve(__dirname, '../..', '.env') });
 
@@ -43,6 +43,39 @@ export const fetchShellCommand = async (strCmd: string): Promise<string> => {
       ...openAIChatCompletionCreateDefaults,
       model: OpenAIModels.gpt35Turbo,
       messages: [{"role": "assistant", "content": `${query}`}],
+      stream: false,
+    });
+
+    console.log(chatCompletion.choices);
+
+    response = chatCompletion.choices[0].message.content || '';
+  } catch (error) {
+    if (error instanceof OpenAI.APIError) {
+      console.error(error.status);
+      console.error(error.message);
+      console.error(error.code);
+      console.error(error.type);
+    } else {
+      // Non-API error
+      console.log(error);
+    }
+  }
+  
+  return response;
+};
+
+export const fetchAnswers = async (question: string): Promise<string> => {
+  let response = '';
+  
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  try {
+    const chatCompletion = await openai.chat.completions.create({
+      ...openAIChatCompletionCreateDefaults,
+      model: OpenAIModels.gpt35Turbo,
+      messages: [{"role": "user", "content": `${question}`}],
       stream: false,
     });
 

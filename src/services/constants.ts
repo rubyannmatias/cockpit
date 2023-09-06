@@ -12,6 +12,8 @@
 
 export const ENVIRONMENT_KEYS = ['username', 'homedir', 'shell'];
 export const TEMP_PATH = 'cockpit-temp';
+export const STORE_KEY_SHELL_SEARCH = 'cockpit-history-shell-search';
+export const STORE_KEY_ANYTHING_SEARCH = 'cockpit-history-anything-search';
 
 export enum OpenAIModels {
   gpt4 = 'gpt-4',

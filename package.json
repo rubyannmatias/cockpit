@@ -22,6 +22,10 @@
       {
         "command": "cockpit.execute",
         "title": "Find Shell Command"
+      },
+      {
+        "command": "cockpit.ask",
+        "title": "Ask Anything"
       }
     ]
   },
