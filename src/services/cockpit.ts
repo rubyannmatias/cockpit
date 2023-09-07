@@ -75,7 +75,7 @@ export const fetchAnswers = async (question: string): Promise<string> => {
     const chatCompletion = await openai.chat.completions.create({
       ...openAIChatCompletionCreateDefaults,
       model: OpenAIModels.gpt35Turbo,
-      messages: [{"role": "user", "content": `${question}`}],
+      messages: [{"role": "user", "content": `${question}. Please stringify the answer to this question.`}],
       stream: false,
     });
 

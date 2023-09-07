@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 		} else if (query !== undefined) {
 			// Execute command string in shell
 			terminal.show();
-			terminal.sendText('echo Finding shell command');
+			terminal.sendText('echo Finding shell command...');
 			const answer = await fetchShellCommand(query);
 			console.log(answer);
 			// terminal.sendText(`echo "${answer}"`);
@@ -78,13 +78,51 @@ export function activate(context: vscode.ExtensionContext) {
 			terminal.sendText('echo Finding answers for you...');
 			const answer = await fetchAnswers(query);
 			console.log(answer);
-			terminal.sendText(`echo "${answer}"`);
+			terminal.sendText(`echo "${answer}" >> temp.txt`);
+			terminal.sendText('open temp.txt');
 			anythingSearchHistory.push(query);
 			store.update(
 				STORE_KEY_ANYTHING_SEARCH,
 				JSON.stringify(anythingSearchHistory.length > 5 ? anythingSearchHistory.splice(-5) : anythingSearchHistory)
 			);
 			// store.update(STORE_KEY_ANYTHING_SEARCH, undefined); // Uncomment this in case you need to clean store
+		}
+	}));
+
+	disposables.push(vscode.commands.registerCommand('cockpit.history', async () => {
+		// The code you place here will be executed every time your command is executed
+		const selection = await vscode.window.showQuickPick(['shell', 'anything'], {
+			placeHolder: 'Show history for which type',
+		});
+
+		console.log(selection);
+
+		if (selection) {
+			const showForShell = selection === 'shell';
+			// The code you place here will be executed every time your command is executed
+			const query = await vscode.window.showQuickPick(showForShell ? [  ...shellCmdSearchHistory ] : [ ...anythingSearchHistory ], {
+				placeHolder: `Pick from previous ${showForShell ? 'shell command' : 'anything'} searches`,
+			});
+
+			console.log(query);
+
+			if (query === undefined) {
+				vscode.window.showErrorMessage('A search query is mandatory to execute this action');
+			} else if (query.length > 0) {
+				// Execute command string in shell
+				terminal.show();
+				terminal.sendText(showForShell ? 'echo Finding shell command...' : 'echo Finding answers for you...');
+				const answer = showForShell ? await fetchShellCommand(query) : await fetchAnswers(query);
+				console.log(answer);
+				// terminal.sendText(`echo "${answer}"`);
+				if (showForShell) {
+					// terminal.sendText(`echo "${answer}"`);
+					terminal.sendText(answer); // Uncomment this if you want the shell command to be run in terminal as-is
+				} else {
+					terminal.sendText(`echo "${answer}" >> temp.txt`);
+					terminal.sendText('open temp.txt');
+				}
+			}
 		}
 	}));
 

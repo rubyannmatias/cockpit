@@ -17,15 +17,19 @@
     "commands": [
       {
         "command": "cockpit.welcome",
-        "title": "Welcome Message"
+        "title": "Cockpit - Welcome Message"
       },
       {
         "command": "cockpit.execute",
-        "title": "Find Shell Command"
+        "title": "Cockpit - Find Shell Command"
       },
       {
         "command": "cockpit.ask",
-        "title": "Ask Anything"
+        "title": "Cockpit - Ask Anything"
+      },
+      {
+        "command": "cockpit.history",
+        "title": "Cockpit - Show Search History"
       }
     ]
   },

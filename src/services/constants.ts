@@ -16,7 +16,7 @@ export const STORE_KEY_SHELL_SEARCH = 'cockpit-history-shell-search';
 export const STORE_KEY_ANYTHING_SEARCH = 'cockpit-history-anything-search';
 
 export enum OpenAIModels {
-  gpt4 = 'gpt-4',
+  gpt4 = 'gpt-4', // needs better pricing plan to consume
   gpt35Turbo = 'gpt-3.5-turbo'
 };
 
