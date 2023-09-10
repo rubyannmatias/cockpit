@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "cockpit" is now active yay!');
+	console.log(vscode.l10n.t('Congratulations, your extension "cockpit" is now active yay!'));
 
 	let disposables: Array<vscode.Disposable> = [];
 	// The command has been defined in the package.json file
@@ -30,28 +30,38 @@ export function activate(context: vscode.ExtensionContext) {
 	disposables.push(vscode.commands.registerCommand('cockpit.welcome', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Welcome to your Cockpit!');
+		vscode.window.showInformationMessage(vscode.l10n.t('Welcome to your Cockpit!'));
 	}));
 
 	disposables.push(vscode.commands.registerCommand('cockpit.execute', async () => {
 		// The code you place here will be executed every time your command is executed
 		const query = await vscode.window.showInputBox({
-			placeHolder: 'Find Shell Command',
-			prompt: 'Enter context or intended use of shell command to find',
+			placeHolder: vscode.l10n.t('Find Shell Command'),
+			prompt: vscode.l10n.t('Enter context or intended use of shell command to find'),
 			value: ''
 		});
 
 		if (query === '') {
 			console.log(query);
-			vscode.window.showErrorMessage('A search query is mandatory to execute this action');
+			vscode.window.showErrorMessage(vscode.l10n.t('A search query is mandatory to execute this action'));
 		} else if (query !== undefined) {
+			vscode.window.showInformationMessage(vscode.l10n.t('Finding shell command for you...'));
 			// Execute command string in shell
-			terminal.show();
-			terminal.sendText('echo Finding shell command...');
 			const answer = await fetchShellCommand(query);
 			console.log(answer);
-			// terminal.sendText(`echo "${answer}"`);
-			terminal.sendText(answer); // Uncomment this if you want the shell command to be run in terminal as-is
+			vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command'), answer, 'Copy to clipboard', vscode.l10n.t('Cancel'))
+				.then((value) => {
+					if (value === answer) {
+						// Execute command string in shell
+						terminal.show();
+						terminal.sendText(answer);
+					} else if (value === 'Copy to clipboard') {
+						terminal.sendText(`echo '${answer}' | pbcopy`);
+					}
+				});
+			
+				
+			// Add search to previous searches
 			shellCmdSearchHistory.push(query);
 			store.update(
 				STORE_KEY_SHELL_SEARCH,
@@ -62,20 +72,21 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	disposables.push(vscode.commands.registerCommand('cockpit.ask', async () => {
+		terminal.sendText('rm temp.txt;');
 		// The code you place here will be executed every time your command is executed
 		const query = await vscode.window.showInputBox({
-			placeHolder: 'Ask Anything',
-			prompt: 'Enter question',
+			placeHolder: vscode.l10n.t('Ask Anything'),
+			prompt: vscode.l10n.t('Enter question'),
 			value: ''
 		});
 
 		if (query === '') {
 			console.log(query);
-			vscode.window.showErrorMessage('A search query is mandatory to execute this action');
+			vscode.window.showErrorMessage(vscode.l10n.t('A search query is mandatory to execute this action'));
 		} else if (query !== undefined) {
 			// Execute command string in shell
 			terminal.show();
-			terminal.sendText('echo Finding answers for you...');
+			terminal.sendText(`echo ${vscode.l10n.t('Finding answers for you...')}`);
 			const answer = await fetchAnswers(query);
 			console.log(answer);
 			terminal.sendText(`echo "${answer}" >> temp.txt`);
@@ -90,9 +101,10 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	disposables.push(vscode.commands.registerCommand('cockpit.history', async () => {
+		terminal.sendText('rm temp.txt;');
 		// The code you place here will be executed every time your command is executed
 		const selection = await vscode.window.showQuickPick(['shell', 'anything'], {
-			placeHolder: 'Show history for which type',
+			placeHolder: vscode.l10n.t('Show history for which type'),
 		});
 
 		console.log(selection);
@@ -101,27 +113,47 @@ export function activate(context: vscode.ExtensionContext) {
 			const showForShell = selection === 'shell';
 			// The code you place here will be executed every time your command is executed
 			const query = await vscode.window.showQuickPick(showForShell ? [  ...shellCmdSearchHistory ] : [ ...anythingSearchHistory ], {
-				placeHolder: `Pick from previous ${showForShell ? 'shell command' : 'anything'} searches`,
+				placeHolder: `${vscode.l10n.t('Pick from previous {0} searches', showForShell ? 'shell command' : 'anything')}`,
 			});
 
 			console.log(query);
 
 			if (query === undefined) {
-				vscode.window.showErrorMessage('A search query is mandatory to execute this action');
+				vscode.window.showErrorMessage(vscode.l10n.t('A search query is mandatory to execute this action'));
 			} else if (query.length > 0) {
-				// Execute command string in shell
-				terminal.show();
-				terminal.sendText(showForShell ? 'echo Finding shell command...' : 'echo Finding answers for you...');
-				const answer = showForShell ? await fetchShellCommand(query) : await fetchAnswers(query);
-				console.log(answer);
-				// terminal.sendText(`echo "${answer}"`);
-				if (showForShell) {
-					// terminal.sendText(`echo "${answer}"`);
-					terminal.sendText(answer); // Uncomment this if you want the shell command to be run in terminal as-is
-				} else {
-					terminal.sendText(`echo "${answer}" >> temp.txt`);
-					terminal.sendText('open temp.txt');
-				}
+				vscode.window.withProgress(
+					{
+						location: vscode.ProgressLocation.Notification,
+						title: showForShell ? vscode.l10n.t('Finding shell command for you...') : vscode.l10n.t('Finding answers for you...'),
+						cancellable: false,
+					},
+					async (progress, token) => {
+						token.onCancellationRequested(() => {
+							console.log(vscode.l10n.t('User canceled the long running operation'));
+						});
+
+						const answer = showForShell ? await fetchShellCommand(query) : await fetchAnswers(query);
+						console.log(answer);
+
+						if (answer.length) {
+							if (showForShell) {
+								vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command'), answer, vscode.l10n.t('Copy to clipboard'), vscode.l10n.t('Cancel'))
+									.then((value) => {
+										if (value === answer) {
+											// Execute command string in shell
+											terminal.show();
+											terminal.sendText(answer);
+										} else if (value === 'Copy to clipboard') {
+											terminal.sendText(`echo '${answer}' | pbcopy`);
+										}
+									});
+							} else {
+								terminal.sendText(`echo "${answer}" >> temp.txt`);
+								terminal.sendText('open temp.txt');
+							}
+						}
+					},
+				);
 			}
 		}
 	}));

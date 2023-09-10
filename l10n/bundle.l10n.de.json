@@ -1,0 +1,17 @@
+{
+  "Congratulations, your extension \"cockpit\" is now active yay!": "Herzlichen Glückwunsch, Ihre Erweiterung „cockpit“ ist jetzt aktiv, juhu!",
+  "Welcome to your Cockpit!": "Willkommen in Ihrem Cockpit!",
+  "Find Shell Command": "Suchen Sie den Shell-Befehl",
+  "Enter context or intended use of shell command to find": "Geben Sie den Kontext oder die beabsichtigte Verwendung des zu suchenden Shell-Befehls ein",
+  "A search query is mandatory to execute this action": "Zur Ausführung dieser Aktion ist eine Suchanfrage erforderlich",
+  "Finding shell command for you...": "Shell-Befehl für Sie gefunden...",
+  "Click to run the shell command": "Klicken Sie, um den Shell-Befehl auszuführen",
+  "Cancel": "Stornieren",
+  "Ask Anything": "Frag irgendwas",
+  "Enter question": "Geben Sie die Frage ein",
+  "Finding answers for you...": "Antworten für Sie finden...",
+  "Show history for which type": "Verlauf für welchen Typ anzeigen",
+  "Pick from previous {0} searches": "Wählen Sie aus früheren {0} Suchanfragen aus",
+  "User canceled the long running operation": "Der Benutzer hat den lang andauernden Vorgang abgebrochen",
+  "Copy to clipboard": "In die Zwischenablage kopieren"
+}
