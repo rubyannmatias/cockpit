@@ -1,12 +1,11 @@
 import { getDirectoryList, getPlatformInfo, getUserInfo } from "../../../utils/envUtils";
-import { platform } from "os";
 import assert = require("assert");
 import { OperatingSystemsEnum } from "../../../services/constants";
 
 suite('Environment Util Test Suite', () => {
 	test('Sample test to check platform', async () => {
-		const platform = getPlatformInfo();
-		assert(Object.values(OperatingSystemsEnum).includes(platform));
+		const platformInfo = getPlatformInfo();
+		assert(Object.values(OperatingSystemsEnum).includes(platformInfo));
 	});
 
 	test('Sample test to check getUserInfo', async () => {
