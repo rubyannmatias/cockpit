@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
 								// Execute command string in shell
 								terminal.show();
 								terminal.sendText(answer);
-							} else if (value === 'Copy to clipboard') {
+							} else if (value === vscode.l10n.t('Copy to clipboard')) {
 								terminal.sendText(`echo '${answer}' | pbcopy`);
 							}
 						});
@@ -164,11 +164,13 @@ export function activate(context: vscode.ExtensionContext) {
 							if (showForShell) {
 								vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command "{0}"', answer), answer, vscode.l10n.t('Copy to clipboard'), vscode.l10n.t('Cancel'))
 									.then((value) => {
+										console.log(value);
+										console.log(vscode.l10n.t('Copy to clipboard'));
 										if (value === answer) {
 											// Execute command string in shell
 											terminal.show();
 											terminal.sendText(answer);
-										} else if (value === 'Copy to clipboard') {
+										} else if (value === vscode.l10n.t('Copy to clipboard')) {
 											terminal.sendText(`echo '${answer}' | pbcopy`);
 										}
 									});

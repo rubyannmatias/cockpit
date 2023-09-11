@@ -1,71 +1,36 @@
 # cockpit README
 
-This is the README for your extension "cockpit". After writing up a brief description, we recommend including the following sections.
+**cockpit** is a VSCode Extension that leverages OpenAI API search capabilities, specifically chat completion, for the purpose of answering the developer user's questions without leaving the IDE. To activate it, run the command **Welcome Message**.
+
+Based on the running machine's platform and environment information that it provides to OpenAI, it can **Find [the] Shell Command** you are looking for even if you just input natural language from within your IDE. It allows you to run the command found right after or first copy it to clipboard.
+
+It also offers a separate command for you to **Ask Anything** from OpenAI, be it random questions or explanation for the shell command you have gotten. You can ask it step-by-step guides for anything and it will pipe the output for you to a temporary text file, which it also immediately opens for you.
+
+It offers persistence of up to the last five (5) of your previous searches, per each category (shell or anything), so that you can just **Show Search History** and run the same search without typing again. For now, it can support English and German via VSCode Configure Display Langugage.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+| Extension Command | Purpose |
+| ----- | ----- |
+| Cockpit - Welcome Message | Activates the VSCode Extension |
+| Cockpit - Find Shell Command | Opens an input box for user to input natural language to give OpenAI context on the shell command user is looking for |
+| Cockpit - Ask Anything | Opens an input box for user to find answers for random questions |
+| Cockpit - Show Search History | Opens a select dropdown first to ask user which category of previous searches to show, and on selection, it shows the user another dropdown to select previous search terms used. |
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+VSCode version at least 1.81.0
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+Not applicable for now.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Please do open an issue, thanks.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release of **cockpit**

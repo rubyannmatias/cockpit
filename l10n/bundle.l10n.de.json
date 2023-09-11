@@ -5,7 +5,7 @@
   "Enter context or intended use of shell command to find": "Geben Sie den Kontext oder die beabsichtigte Verwendung des zu suchenden Shell-Befehls ein",
   "A search query is mandatory to execute this action": "Zur Ausführung dieser Aktion ist eine Suchanfrage erforderlich",
   "Finding shell command for you...": "Shell-Befehl für Sie gefunden...",
-  "Click to run the shell command": "Klicken Sie, um den Shell-Befehl auszuführen",
+  "Click to run the shell command \"{0}\"": "Klicken Sie, um den Shell-Befehl auszuführen \"{0}\"",
   "Cancel": "Stornieren",
   "Ask Anything": "Frag irgendwas",
   "Enter question": "Geben Sie die Frage ein",
