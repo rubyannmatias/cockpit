@@ -1,0 +1,17 @@
+{
+  "Congratulations, your extension \"cockpit\" is now active yay!": "Congratulations, your extension \"cockpit\" is now active yay!",
+  "Welcome to your Cockpit!": "Welcome to your Cockpit!",
+  "Find Shell Command": "Find Shell Command",
+  "Enter context or intended use of shell command to find": "Enter context or intended use of shell command to find",
+  "A search query is mandatory to execute this action": "A search query is mandatory to execute this action",
+  "Finding shell command for you...": "Finding shell command for you...",
+  "Click to run the shell command": "Click to run the shell command",
+  "Cancel": "Cancel",
+  "Ask Anything": "Ask Anything",
+  "Enter question": "Enter question",
+  "Finding answers for you...": "Finding answers for you...",
+  "Show history for which type": "Show history for which type",
+  "Pick from previous {0} searches": "Pick from previous {0} searches",
+  "User canceled the long running operation": "User canceled the long running operation",
+  "Copy to clipboard": "Copy to clipboard"
+}

@@ -17,19 +17,19 @@
     "commands": [
       {
         "command": "cockpit.welcome",
-        "title": "Cockpit - Welcome Message"
+        "title": "%commandStr.welcome%"
       },
       {
         "command": "cockpit.execute",
-        "title": "Cockpit - Find Shell Command"
+        "title": "%commandStr.execute%"
       },
       {
         "command": "cockpit.ask",
-        "title": "Cockpit - Ask Anything"
+        "title": "%commandStr.ask%"
       },
       {
         "command": "cockpit.history",
-        "title": "Cockpit - Show Search History"
+        "title": "%commandStr.history%"
       }
     ]
   },
@@ -39,7 +39,8 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "translate": "npx @vscode/l10n-dev export -o ./l10n ./src"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
@@ -57,5 +58,6 @@
     "dotenv": "^16.3.1",
     "openai": "^4.4.0",
     "openai-node": "^1.0.5"
-  }
+  },
+  "l10n": "./l10n"
 }

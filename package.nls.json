@@ -1,0 +1,6 @@
+{
+  "commandStr.welcome": "Cockpit - Welcome Message",
+  "commandStr.execute": "Cockpit - Find Shell Command",
+  "commandStr.ask": "Cockpit - Ask Anything",
+  "commandStr.history": "Cockpit - Show Search History"
+}
