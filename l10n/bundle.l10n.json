@@ -5,7 +5,7 @@
   "Enter context or intended use of shell command to find": "Enter context or intended use of shell command to find",
   "A search query is mandatory to execute this action": "A search query is mandatory to execute this action",
   "Finding shell command for you...": "Finding shell command for you...",
-  "Click to run the shell command": "Click to run the shell command",
+  "Click to run the shell command \"{0}\"": "Click to run the shell command \"{0}\"",
   "Cancel": "Cancel",
   "Ask Anything": "Ask Anything",
   "Enter question": "Enter question",

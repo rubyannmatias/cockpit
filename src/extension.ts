@@ -13,8 +13,8 @@ const terminal = vscode.window.createTerminal();
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	const store = context.globalState;
-	const shellCmdSearchHistory = getPastSearches(STORE_KEY_SHELL_SEARCH, store);
-	const anythingSearchHistory = getPastSearches(STORE_KEY_ANYTHING_SEARCH, store);
+	let shellCmdSearchHistory = getPastSearches(STORE_KEY_SHELL_SEARCH, store);
+	let anythingSearchHistory = getPastSearches(STORE_KEY_ANYTHING_SEARCH, store);
 
 	console.log(shellCmdSearchHistory);
 	console.log(anythingSearchHistory);
@@ -49,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
 			// Execute command string in shell
 			const answer = await fetchShellCommand(query);
 			console.log(answer);
-			vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command'), answer, 'Copy to clipboard', vscode.l10n.t('Cancel'))
+			vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command "{0}"', answer), answer, 'Copy to clipboard', vscode.l10n.t('Cancel'))
 				.then((value) => {
 					if (value === answer) {
 						// Execute command string in shell
@@ -63,10 +63,11 @@ export function activate(context: vscode.ExtensionContext) {
 				
 			// Add search to previous searches
 			shellCmdSearchHistory.push(query);
-			store.update(
+			await store.update(
 				STORE_KEY_SHELL_SEARCH,
 				JSON.stringify(shellCmdSearchHistory.length > 5 ? shellCmdSearchHistory.splice(-5) : shellCmdSearchHistory)
 			);
+			shellCmdSearchHistory = getPastSearches(STORE_KEY_SHELL_SEARCH, store);
 			// store.update(STORE_KEY_SHELL_SEARCH, undefined); // Uncomment this in case you need to clean store
 		}
 	}));
@@ -92,10 +93,11 @@ export function activate(context: vscode.ExtensionContext) {
 			terminal.sendText(`echo "${answer}" >> temp.txt`);
 			terminal.sendText('open temp.txt');
 			anythingSearchHistory.push(query);
-			store.update(
+			await store.update(
 				STORE_KEY_ANYTHING_SEARCH,
 				JSON.stringify(anythingSearchHistory.length > 5 ? anythingSearchHistory.splice(-5) : anythingSearchHistory)
 			);
+			anythingSearchHistory = getPastSearches(STORE_KEY_ANYTHING_SEARCH, store);
 			// store.update(STORE_KEY_ANYTHING_SEARCH, undefined); // Uncomment this in case you need to clean store
 		}
 	}));
@@ -137,7 +139,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 						if (answer.length) {
 							if (showForShell) {
-								vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command'), answer, vscode.l10n.t('Copy to clipboard'), vscode.l10n.t('Cancel'))
+								vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command "{0}"', answer), answer, vscode.l10n.t('Copy to clipboard'), vscode.l10n.t('Cancel'))
 									.then((value) => {
 										if (value === answer) {
 											// Execute command string in shell
