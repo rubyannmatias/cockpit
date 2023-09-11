@@ -45,30 +45,42 @@ export function activate(context: vscode.ExtensionContext) {
 			console.log(query);
 			vscode.window.showErrorMessage(vscode.l10n.t('A search query is mandatory to execute this action'));
 		} else if (query !== undefined) {
-			vscode.window.showInformationMessage(vscode.l10n.t('Finding shell command for you...'));
-			// Execute command string in shell
-			const answer = await fetchShellCommand(query);
-			console.log(answer);
-			vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command "{0}"', answer), answer, 'Copy to clipboard', vscode.l10n.t('Cancel'))
-				.then((value) => {
-					if (value === answer) {
-						// Execute command string in shell
-						terminal.show();
-						terminal.sendText(answer);
-					} else if (value === 'Copy to clipboard') {
-						terminal.sendText(`echo '${answer}' | pbcopy`);
-					}
-				});
-			
-				
-			// Add search to previous searches
-			shellCmdSearchHistory.push(query);
-			await store.update(
-				STORE_KEY_SHELL_SEARCH,
-				JSON.stringify(shellCmdSearchHistory.length > 5 ? shellCmdSearchHistory.splice(-5) : shellCmdSearchHistory)
+			vscode.window.withProgress(
+				{
+					location: vscode.ProgressLocation.Notification,
+					title: vscode.l10n.t('Finding shell command for you...'),
+					cancellable: false,
+				},
+				async (progress, token) => {
+					token.onCancellationRequested(() => {
+						console.log(vscode.l10n.t('User canceled the long running operation'));
+					});
+
+					// Execute command string in shell
+					const answer = await fetchShellCommand(query);
+					console.log(answer);
+					vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command "{0}"', answer), answer, 'Copy to clipboard', vscode.l10n.t('Cancel'))
+						.then((value) => {
+							if (value === answer) {
+								// Execute command string in shell
+								terminal.show();
+								terminal.sendText(answer);
+							} else if (value === 'Copy to clipboard') {
+								terminal.sendText(`echo '${answer}' | pbcopy`);
+							}
+						});
+					
+						
+					// Add search to previous searches
+					shellCmdSearchHistory.push(query);
+					await store.update(
+						STORE_KEY_SHELL_SEARCH,
+						JSON.stringify(shellCmdSearchHistory.length > 5 ? shellCmdSearchHistory.splice(-5) : shellCmdSearchHistory)
+					);
+					shellCmdSearchHistory = getPastSearches(STORE_KEY_SHELL_SEARCH, store);
+					// store.update(STORE_KEY_SHELL_SEARCH, undefined); // Uncomment this in case you need to clean store
+				},
 			);
-			shellCmdSearchHistory = getPastSearches(STORE_KEY_SHELL_SEARCH, store);
-			// store.update(STORE_KEY_SHELL_SEARCH, undefined); // Uncomment this in case you need to clean store
 		}
 	}));
 
@@ -85,20 +97,31 @@ export function activate(context: vscode.ExtensionContext) {
 			console.log(query);
 			vscode.window.showErrorMessage(vscode.l10n.t('A search query is mandatory to execute this action'));
 		} else if (query !== undefined) {
-			// Execute command string in shell
-			terminal.show();
-			terminal.sendText(`echo ${vscode.l10n.t('Finding answers for you...')}`);
-			const answer = await fetchAnswers(query);
-			console.log(answer);
-			terminal.sendText(`echo "${answer}" >> temp.txt`);
-			terminal.sendText('open temp.txt');
-			anythingSearchHistory.push(query);
-			await store.update(
-				STORE_KEY_ANYTHING_SEARCH,
-				JSON.stringify(anythingSearchHistory.length > 5 ? anythingSearchHistory.splice(-5) : anythingSearchHistory)
+			vscode.window.withProgress(
+				{
+					location: vscode.ProgressLocation.Notification,
+					title: vscode.l10n.t('Finding answers for you...'),
+					cancellable: false,
+				},
+				async (progress, token) => {
+					token.onCancellationRequested(() => {
+						console.log(vscode.l10n.t('User canceled the long running operation'));
+					});
+
+					// Execute command string in shell
+					const answer = await fetchAnswers(query);
+					console.log(answer);
+					terminal.sendText(`echo "${answer}" >> temp.txt`);
+					terminal.sendText('open temp.txt');
+					anythingSearchHistory.push(query);
+					await store.update(
+						STORE_KEY_ANYTHING_SEARCH,
+						JSON.stringify(anythingSearchHistory.length > 5 ? anythingSearchHistory.splice(-5) : anythingSearchHistory)
+					);
+					anythingSearchHistory = getPastSearches(STORE_KEY_ANYTHING_SEARCH, store);
+					// store.update(STORE_KEY_ANYTHING_SEARCH, undefined); // Uncomment this in case you need to clean store
+				},
 			);
-			anythingSearchHistory = getPastSearches(STORE_KEY_ANYTHING_SEARCH, store);
-			// store.update(STORE_KEY_ANYTHING_SEARCH, undefined); // Uncomment this in case you need to clean store
 		}
 	}));
 
