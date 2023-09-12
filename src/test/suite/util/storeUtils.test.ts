@@ -3,7 +3,7 @@ import { ExtensionContext, extensions } from 'vscode';
 import { STORE_KEY_ANYTHING_SEARCH, STORE_KEY_SHELL_SEARCH } from '../../../services/constants';
 import { getPastSearches } from '../../../utils/storeUtils';
 
-suite('vscode API - globalState / workspaceState', () => {
+suite('vscode extension - globalState API', () => {
 
     let extensionContext: ExtensionContext;
     suiteSetup(async () => {
@@ -11,7 +11,7 @@ suite('vscode API - globalState / workspaceState', () => {
         await extensions.getExtension('playground-lgb.cockpit')?.activate(); // Publisher.extension-name - 'playground-lgb.cockpit'
     });
 
-    test('state', async () => {
+    test('Store util test', async () => {
         // Grab context here
         extensionContext = (global as any).testExtensionContext;
         const store = extensionContext.globalState;
