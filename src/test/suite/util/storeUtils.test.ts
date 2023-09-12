@@ -1,7 +1,5 @@
 import * as assert from 'assert';
-import 'mocha';
 import { ExtensionContext, extensions } from 'vscode';
-import * as vscode from 'vscode';
 import { STORE_KEY_ANYTHING_SEARCH, STORE_KEY_SHELL_SEARCH } from '../../../services/constants';
 import { getPastSearches } from '../../../utils/storeUtils';
 
