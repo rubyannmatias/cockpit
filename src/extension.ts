@@ -12,6 +12,8 @@ const terminal = vscode.window.createTerminal();
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	// Set context as a global as some tests depend on it
+	(global as any).testExtensionContext = context;
 	const store = context.globalState;
 	let shellCmdSearchHistory = getPastSearches(STORE_KEY_SHELL_SEARCH, store);
 	let anythingSearchHistory = getPastSearches(STORE_KEY_ANYTHING_SEARCH, store);
