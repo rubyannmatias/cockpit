@@ -12,6 +12,7 @@ suite('Extension Test Suite', () => {
 		const cmds = await vscode.commands.getCommands(true);
 		const expectCommands = [
 			'cockpit.welcome',
+			'cockpit.configure',
 			'cockpit.execute',
 			'cockpit.ask',
 			'cockpit.history',
