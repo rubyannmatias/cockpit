@@ -9,22 +9,28 @@
  * Use, duplication or disclosure restricted by GSA ADP Schedule          *
  **************************************************************************
  */
+import * as vscode from 'vscode';
 import * as os from 'os';
 import * as path from 'path';
 import { OpenAI } from 'openai';
-import { OpenAIModels, openAIChatCompletionCreateDefaults } from './constants';
+import { OpenAIModels, openAIChatCompletionCreateDefaults, OPENAI_API_KEY_STORE_KEY } from './constants';
 import { getUserInfo, getPlatformInfo, getDirectoryList } from '../utils/envUtils';
 
 require('dotenv').config({ path: path.resolve(__dirname, '../..', '.env') });
 
-export const fetchShellCommand = async (strCmd: string): Promise<string> => {
+export const fetchShellCommand = async (strCmd: string, secretStorage: vscode.SecretStorage): Promise<string> => {
   let response = '';
   const operatingSystem = getPlatformInfo();
   const environmentKeysStr = getUserInfo(operatingSystem);
   const directoryList = await getDirectoryList(process.cwd());
+  let apiKeyStr = process.env.OPENAI_API_KEY;
+
+  await secretStorage.get(OPENAI_API_KEY_STORE_KEY).then((value) => {
+    if (value) { apiKeyStr = value; }
+  });
   
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: apiKeyStr,
   });
 
   const query = `
@@ -64,11 +70,16 @@ export const fetchShellCommand = async (strCmd: string): Promise<string> => {
   return response;
 };
 
-export const fetchAnswers = async (question: string): Promise<string> => {
+export const fetchAnswers = async (question: string, secretStorage: vscode.SecretStorage): Promise<string> => {
   let response = '';
+  let apiKeyStr = process.env.OPENAI_API_KEY;
+
+  await secretStorage.get(OPENAI_API_KEY_STORE_KEY).then((value) => {
+    if (value) { apiKeyStr = value; }
+  });
   
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: apiKeyStr,
   });
 
   try {

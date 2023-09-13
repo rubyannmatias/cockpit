@@ -1,6 +1,9 @@
 {
   "Congratulations, your extension \"cockpit\" is now active yay!": "Herzlichen Glückwunsch, Ihre Erweiterung „cockpit“ ist jetzt aktiv, juhu!",
   "Welcome to your Cockpit!": "Willkommen in Ihrem Cockpit!",
+  "Enter your OpenAI API key for secret storage here": "Geben Sie hier Ihren OpenAI-API-Schlüssel für die geheime Speicherung ein",
+  "A valid OpenAI API key is required for the extension to use the AI": "Damit die Erweiterung die KI verwenden kann, ist ein gültiger OpenAI-API-Schlüssel erforderlich",
+  "Your OpenAI API key has been stored safely": "Ihr OpenAI-API-Schlüssel wurde sicher gespeichert. Wenn sie gültig ist, können Sie mit der Nutzung dieser Erweiterung beginnen.",
   "Find Shell Command": "Suchen Sie den Shell-Befehl",
   "Enter context or intended use of shell command to find": "Geben Sie den Kontext oder die beabsichtigte Verwendung des zu suchenden Shell-Befehls ein",
   "A search query is mandatory to execute this action": "Zur Ausführung dieser Aktion ist eine Suchanfrage erforderlich",

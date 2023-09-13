@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { fetchShellCommand, fetchAnswers } from './services/cockpit';
-import { STORE_KEY_SHELL_SEARCH, STORE_KEY_ANYTHING_SEARCH } from './services/constants';
+import { STORE_KEY_SHELL_SEARCH, STORE_KEY_ANYTHING_SEARCH, OPENAI_API_KEY_STORE_KEY } from './services/constants';
 import { getPastSearches } from './utils/storeUtils';
 
 require('dotenv').config();
@@ -15,6 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Set context as a global as some tests depend on it
 	(global as any).testExtensionContext = context;
 	const store = context.globalState;
+	const secretStorage = context.secrets;
 	let shellCmdSearchHistory = getPastSearches(STORE_KEY_SHELL_SEARCH, store);
 	let anythingSearchHistory = getPastSearches(STORE_KEY_ANYTHING_SEARCH, store);
 
@@ -35,6 +36,23 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage(vscode.l10n.t('Welcome to your Cockpit!'));
 	}));
 
+	disposables.push(vscode.commands.registerCommand('cockpit.configure', async () => {
+		// The code you place here will be executed every time your command is executed
+		const apiKey = await vscode.window.showInputBox({
+			placeHolder: vscode.l10n.t('Enter your OpenAI API key for secret storage here'),
+			prompt: vscode.l10n.t('A valid OpenAI API key is required for the extension to use the AI'),
+			value: ''
+		});
+
+		if (apiKey === '') {
+			vscode.window.showErrorMessage(vscode.l10n.t('A valid OpenAI API key is required for the extension to use the AI'));
+		} else if (apiKey !== undefined) {
+			await secretStorage.store(OPENAI_API_KEY_STORE_KEY, apiKey);
+			vscode.window.showInformationMessage(vscode.l10n.t('Your OpenAI API key has been stored safely'));
+			// secretStorage.get(OPENAI_API_KEY_STORE_KEY).then((value) => console.log(value));
+		}
+	}));
+
 	disposables.push(vscode.commands.registerCommand('cockpit.execute', async () => {
 		// The code you place here will be executed every time your command is executed
 		const query = await vscode.window.showInputBox({
@@ -44,7 +62,6 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 
 		if (query === '') {
-			console.log(query);
 			vscode.window.showErrorMessage(vscode.l10n.t('A search query is mandatory to execute this action'));
 		} else if (query !== undefined) {
 			vscode.window.withProgress(
@@ -59,7 +76,7 @@ export function activate(context: vscode.ExtensionContext) {
 					});
 
 					// Execute command string in shell
-					const answer = await fetchShellCommand(query);
+					const answer = await fetchShellCommand(query, secretStorage);
 					console.log(answer);
 					vscode.window.showInformationMessage(vscode.l10n.t('Click to run the shell command "{0}"', answer), answer, 'Copy to clipboard', vscode.l10n.t('Cancel'))
 						.then((value) => {
@@ -111,7 +128,7 @@ export function activate(context: vscode.ExtensionContext) {
 					});
 
 					// Execute command string in shell
-					const answer = await fetchAnswers(query);
+					const answer = await fetchAnswers(query, secretStorage);
 					console.log(answer);
 					terminal.sendText(`echo "${answer}" >> temp.txt`);
 					terminal.sendText('open temp.txt');
@@ -159,7 +176,7 @@ export function activate(context: vscode.ExtensionContext) {
 							console.log(vscode.l10n.t('User canceled the long running operation'));
 						});
 
-						const answer = showForShell ? await fetchShellCommand(query) : await fetchAnswers(query);
+						const answer = showForShell ? await fetchShellCommand(query, secretStorage) : await fetchAnswers(query, secretStorage);
 						console.log(answer);
 
 						if (answer.length) {

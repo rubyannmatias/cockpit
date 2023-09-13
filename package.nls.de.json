@@ -1,5 +1,6 @@
 {
   "commandStr.welcome": "Cockpit – Willkommensnachricht",
+  "commandStr.configure": "Cockpit – Konfigurieren",
   "commandStr.execute": "Cockpit – Shell-Befehl suchen",
   "commandStr.ask": "Cockpit – Fragen Sie alles",
   "commandStr.history": "Cockpit – Suchverlauf anzeigen"
