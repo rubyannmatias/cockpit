@@ -34,6 +34,6 @@ Please do open an issue, thanks.
 
 ## Release Notes
 
-### 0.3.0
+### 0.5.0
 
 Initial release of **cockpit**
