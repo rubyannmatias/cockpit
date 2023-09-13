@@ -4,7 +4,11 @@
   "description": "",
   "version": "0.3.0",
   "publisher": "playground-lgb",
-  "repository": "https://github.com/rubyannmatias/cockpit",
+  "icon": "assets/images/icon-brand-cockpit.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rubyannmatias/cockpit"
+  },
   "license": "MIT",
   "engines": {
     "vscode": "^1.81.0"
