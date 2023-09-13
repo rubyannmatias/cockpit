@@ -4,6 +4,7 @@
   "description": "",
   "version": "0.1.0",
   "publisher": "playground-lgb",
+  "type": "module",
   "repository": "https://github.com/rubyannmatias/cockpit",
   "license": "MIT",
   "engines": {
