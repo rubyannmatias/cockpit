@@ -2,7 +2,7 @@
   "name": "cockpit",
   "displayName": "Cockpit",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "playground-lgb",
   "repository": "https://github.com/rubyannmatias/cockpit",
   "license": "MIT",
